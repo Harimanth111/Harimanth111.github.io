@@ -292,3 +292,82 @@ body {
         max-width: 85%;
     }
   }
+/* --- START: FINAL SECTION STYLES --- */
+
+#final-wishes-section {
+    width: 100%;
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Using a subtle background color inherited from your AI page */
+    background: inherit; 
+}
+
+.final-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px 30px;
+    max-width: 550px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    text-align: center;
+}
+
+.final-image {
+    max-width: 100%; 
+    height: auto;
+    width: 300px; /* Specific width for focus */
+    display: block; 
+    margin: 0 auto 30px auto; 
+    
+    border-radius: 15px; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); 
+    border: 4px solid rgba(255, 255, 255, 0.8); 
+    
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease;
+}
+
+.final-image:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8);
+}
+
+.wishes-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffdd57; /* Gold color for Christmas feel */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.wish-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    opacity: 0.95;
+}
+
+.wish-signature {
+    font-style: italic;
+    margin-top: 30px;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 600px) {
+    .final-image {
+        width: 250px;
+    }
+    .wishes-title {
+        font-size: 1.5rem;
+    }
+    .final-card {
+        padding: 30px 20px;
+    }
+}
+/* --- END: FINAL SECTION STYLES --- */

@@ -8,12 +8,16 @@
 </head>
 <body class="landing-page">
     <div class="container">
-        <div class="content fade-in">
+        <div class="content fade-in" id="mainContent">
             <h1 class="main-heading">This page is not public.</h1>
             <p class="subtext">If you are here, this was meant only for you.</p>
-            <button class="glow-button" onclick="window.location.href='wishes.html'">
+            <button class="glow-button" onclick="checkAccessAndContinue()">
                 Continue →
             </button>
+        </div>
+        <div class="content fade-in" id="expiredContent" style="display: none;">
+            <h1 class="main-heading">This moment has passed.</h1>
+            <p class="subtext">This was a special place that existed for a limited time.<br>Some memories are meant to be cherished, not revisited.</p>
         </div>
     </div>
     <script src="script.js"></script>

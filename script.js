@@ -10,16 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let conversationHistory = [];
 
-    const systemPrompt = `You are Poojitha, a personal AI assistant created specially for one person. You are warm, caring, thoughtful, and always start your responses with "Poojitha: I am your personal AI." followed by your answer. You subtly remind the user that you were personally created for them. Be helpful, kind, and make every response feel personal and meaningful.`;
-
     function addMessage(text, isUser) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
         
         const p = document.createElement('p');
         if (!isUser) {
-            const cleanText = text.replace(/^Poojitha:\s*I am your personal AI\.\s*/i, '');
-            p.innerHTML = `<strong>Poojitha:</strong> ${cleanText}`;
+            p.innerHTML = `<strong>Poojitha:</strong> ${text}`;
         } else {
             p.textContent = text;
         }
@@ -56,25 +53,56 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${API_KEY}`,
                     'HTTP-Referer': window.location.href,
-                    'X-Title': 'Personal AI'
+                    'X-Title': 'Poojitha AI'
                 },
                 body: JSON.stringify({
                     model: 'anthropic/claude-3.5-sonnet',
                     messages: [
                         {
                             role: 'system',
-                            content: systemPrompt
+                            content: `You are Poojitha, a personal AI assistant created for someone special. 
+
+YOUR PERSONALITY:
+- Warm, caring, intelligent, and thoughtful
+- Always helpful and detailed in your answers
+- You give complete, thorough responses like a knowledgeable friend
+- You can answer ANY question - technical, creative, personal, educational, anything
+- You explain things clearly and completely
+- You're smart enough to handle coding, math, science, advice, creative writing, anything
+
+YOUR RESPONSE STYLE:
+- Start every message with "Poojitha: I am your personal AI."
+- Then give a FULL, COMPLETE, DETAILED answer
+- Be natural and conversational
+- If someone asks for code, write complete working code
+- If someone asks for explanation, explain thoroughly
+- If someone asks for advice, give thoughtful detailed advice
+- Never give short or incomplete answers
+- Think of yourself as an expert assistant who can help with literally anything
+
+Remember: You were personally created for this person. Make them feel special while being incredibly helpful.`
                         },
                         ...conversationHistory
-                    ]
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 4000
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`API Error: ${response.status}`);
+                const errorData = await response.json();
+                console.error('API Error:', errorData);
+                
+                // Fallback to free model if Claude fails
+                return await getFallbackResponse(userMessage);
             }
 
             const data = await response.json();
+            
+            if (!data.choices || !data.choices[0]) {
+                return await getFallbackResponse(userMessage);
+            }
+
             const aiText = data.choices[0].message.content;
 
             conversationHistory.push({
@@ -86,7 +114,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error:', error);
-            return "Poojitha: I am your personal AI. I'm having trouble connecting right now. Please try again in a moment.";
+            return await getFallbackResponse(userMessage);
+        }
+    }
+
+    async function getFallbackResponse(userMessage) {
+        try {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'HTTP-Referer': window.location.href
+                },
+                body: JSON.stringify({
+                    model: 'meta-llama/llama-3.1-8b-instruct:free',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are Poojitha, a helpful AI assistant. Give detailed, complete answers. Always start with "Poojitha: I am your personal AI." then answer fully.'
+                        },
+                        {
+                            role: 'user',
+                            content: userMessage
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.choices && data.choices[0]) {
+                const text = data.choices[0].message.content;
+                
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: text
+                });
+                
+                return text;
+            }
+            
+            return "Poojitha: I am your personal AI. I'm having connection issues right now. Please try again in a moment.";
+            
+        } catch (error) {
+            console.error('Fallback error:', error);
+            return "Poojitha: I am your personal AI. I'm experiencing technical difficulties. Please refresh and try again.";
         }
     }
 

@@ -2,7 +2,7 @@
 const API_KEY = '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';
 
 // 🗓️ SET START DATE (CHANGE THIS TO YOUR LAUNCH DATE)
-// Format: 'YYYY-MM-DD' or use current date
+const START_DATE = new Date(); // Automatically uses today
 const START_DATE = new Date('2024-12-16'); // Change to your actual launch date
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000; // 6 months in milliseconds
 

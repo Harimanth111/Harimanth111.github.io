@@ -1,14 +1,15 @@
 // 🔑 OPENROUTER API KEY
 const API_KEY = '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';
 
-// 🗓️ SET START DATE - CHANGE THIS TO YOUR LAUNCH DATE
-const START_DATE = new Date('2024-12-17'); // Today's date
+// 🗓️ SET START DATE - AB SE 6 MONTHS
+const START_DATE = new Date(); // Current date se automatically start
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
 // 🔒 CHECK ACCESS FUNCTION
 function checkAccess() {
     const now = new Date();
     const timePassed = now - START_DATE;
+    console.log('Time passed:', timePassed, 'Limit:', SIX_MONTHS_MS);
     return timePassed < SIX_MONTHS_MS;
 }
 
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Skip check on index page
     if (currentPage.includes('index.html') || currentPage === '/' || currentPage.endsWith('/')) {
-        console.log('Index page - no redirect');
+        console.log('Index page loaded');
         return;
     }
     

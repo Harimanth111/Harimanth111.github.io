@@ -1,10 +1,9 @@
 // 🔑 OPENROUTER API KEY
 const API_KEY = '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';
 
-// 🗓️ SET START DATE (CHANGE THIS TO YOUR LAUNCH DATE)
-const START_DATE = new Date(); // Automatically uses today
-const START_DATE = new Date('2024-12-16'); // Change to your actual launch date
-const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000; // 6 months in milliseconds
+// 🗓️ SET START DATE - CHANGE THIS TO YOUR LAUNCH DATE
+const START_DATE = new Date('2024-12-17'); // Today's date
+const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
 // 🔒 CHECK ACCESS FUNCTION
 function checkAccess() {
@@ -22,14 +21,23 @@ function checkAccessAndContinue() {
     }
 }
 
-// 🚫 BLOCK ACCESS ON ALL PAGES
+// 🚫 BLOCK ACCESS ON OTHER PAGES
 document.addEventListener('DOMContentLoaded', function() {
-    // Check access on every page except index
-    const currentPage = window.location.pathname.split('/').pop();
+    const currentPage = window.location.pathname;
     
-    if (currentPage !== 'index.html' && currentPage !== '') {
+    // Skip check on index page
+    if (currentPage.includes('index.html') || currentPage === '/' || currentPage.endsWith('/')) {
+        console.log('Index page - no redirect');
+        return;
+    }
+    
+    // Check access on other pages
+    if (currentPage.includes('wishes.html') || 
+        currentPage.includes('photos.html') || 
+        currentPage.includes('ai.html')) {
         if (!checkAccess()) {
-            window.location.href = 'index.html';
+            window.location.href = './';
+            return;
         }
     }
 
@@ -100,7 +108,6 @@ YOUR PERSONALITY:
 - You give complete, thorough responses like a knowledgeable friend
 - You can answer ANY question - technical, creative, personal, educational, anything
 - You explain things clearly and completely
-- You're smart enough to handle coding, math, science, advice, creative writing, anything
 
 YOUR RESPONSE STYLE:
 - Start every message with "Poojitha: I am your personal AI."
@@ -108,9 +115,7 @@ YOUR RESPONSE STYLE:
 - Be natural and conversational
 - If someone asks for code, write complete working code
 - If someone asks for explanation, explain thoroughly
-- If someone asks for advice, give thoughtful detailed advice
 - Never give short or incomplete answers
-- Think of yourself as an expert assistant who can help with literally anything
 
 Remember: You were personally created for this person. Make them feel special while being incredibly helpful.`
                         },
